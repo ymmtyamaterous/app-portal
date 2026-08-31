@@ -8,6 +8,13 @@
       "when": 1788162855787,
       "tag": "0000_curly_psynapse",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1788163663389,
+      "tag": "0001_mysterious_thaddeus_ross",
+      "breakpoints": true
     }
   ]
 }

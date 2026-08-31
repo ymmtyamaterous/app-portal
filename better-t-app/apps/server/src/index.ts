@@ -90,7 +90,10 @@ app.use("/*", async (c, next) => {
   if (c.req.path.startsWith("/rpc")) {
     c.header("Cache-Control", "no-store");
   }
-  const context = await createContext({ context: c });
+  const context = await createContext({
+    context: c,
+    clientIp: getClientAddress(c.req.raw, env.TRUST_PROXY),
+  });
 
   const rpcResult = await rpcHandler.handle(c.req.raw, {
     prefix: "/rpc",
