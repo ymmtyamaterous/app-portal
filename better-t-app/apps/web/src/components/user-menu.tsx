@@ -1,12 +1,12 @@
 import { Button } from "@better-t-app/ui/components/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
 } from "@better-t-app/ui/components/dropdown-menu";
 import { Skeleton } from "@better-t-app/ui/components/skeleton";
 import { Link, useNavigate } from "@tanstack/react-router";
@@ -14,49 +14,59 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { authClient } from "@/lib/auth-client";
 
 export default function UserMenu() {
-  const navigate = useNavigate();
-  const { data: session, isPending } = authClient.useSession();
+	const navigate = useNavigate();
+	const { data: session, isPending } = authClient.useSession();
+	const role = (session?.user as { role?: string } | undefined)?.role;
 
-  if (isPending) {
-    return <Skeleton className="h-9 w-24" />;
-  }
+	if (isPending) {
+		return <Skeleton className="h-9 w-24" />;
+	}
 
-  if (!session) {
-    return (
-      <Link to="/login">
-        <Button variant="outline">Sign In</Button>
-      </Link>
-    );
-  }
+	if (!session) {
+		return (
+			<Link to="/login">
+				<Button variant="outline">Sign In</Button>
+			</Link>
+		);
+	}
 
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger render={<Button variant="outline" />}>
-        {session.user.name}
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-card">
-        <DropdownMenuGroup>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>{session.user.email}</DropdownMenuItem>
-          <DropdownMenuItem
-            variant="destructive"
-            onClick={() => {
-              authClient.signOut({
-                fetchOptions: {
-                  onSuccess: () => {
-                    navigate({
-                      to: "/",
-                    });
-                  },
-                },
-              });
-            }}
-          >
-            Sign Out
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
+	return (
+		<DropdownMenu>
+			<DropdownMenuTrigger render={<Button variant="outline" />}>
+				{session.user.name}
+			</DropdownMenuTrigger>
+			<DropdownMenuContent className="bg-card">
+				<DropdownMenuGroup>
+					<DropdownMenuLabel>My Account</DropdownMenuLabel>
+					<DropdownMenuSeparator />
+					<DropdownMenuItem>{session.user.email}</DropdownMenuItem>
+					{role === "admin" ? (
+						<DropdownMenuItem
+							render={
+								<Link to="/admin" search={{ tab: "manage", period: "all" }} />
+							}
+						>
+							管理画面
+						</DropdownMenuItem>
+					) : null}
+					<DropdownMenuItem
+						variant="destructive"
+						onClick={() => {
+							authClient.signOut({
+								fetchOptions: {
+									onSuccess: () => {
+										navigate({
+											to: "/",
+										});
+									},
+								},
+							});
+						}}
+					>
+						Sign Out
+					</DropdownMenuItem>
+				</DropdownMenuGroup>
+			</DropdownMenuContent>
+		</DropdownMenu>
+	);
 }
