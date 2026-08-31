@@ -1,0 +1,25 @@
+name: ${PROJECT_NAME}
+services:
+  dev:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - type: bind
+        source: ..
+        target: /workspace
+    ports:
+      # backend
+      - mode: ingress
+        target: 3000
+        published: "3000"
+        protocol: tcp
+      # frontend
+      - mode: ingress
+        target: 3001
+        published: "3001"
+        protocol: tcp
+    tty: true
+    stdin_open: true
+    env_file:
+      - .env

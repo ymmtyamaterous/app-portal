@@ -1,0 +1,11 @@
+{
+    "name": "tanstack-container-dev",
+    "dockerComposeFile": "../infra/compose.yml",
+    "service": "dev",
+    "workspaceFolder": "/workspace",
+    "customizations": {
+        "vscode": {
+            "extensions": []
+        }
+    }
+}

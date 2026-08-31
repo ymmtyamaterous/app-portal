@@ -1,0 +1,4 @@
+.env
+tmp
+devcontainer.json
+better-t-app/local.db
